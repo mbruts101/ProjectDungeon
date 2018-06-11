@@ -23,11 +23,11 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if(InputManager.AttackButton()) //check if attacking
+        if(InputManager.AttackButton() && !isAttacking) //check if attacking
         {
             isAttacking = true;
         }
-        if(InputManager.DodgeButton()) //check if dodging
+        if(InputManager.DodgeButton() && !isDodging) //check if dodging
         {
             dodgeTimer = 15;
             isDodging = true;
@@ -63,6 +63,10 @@ public class PlayerController : MonoBehaviour {
             {
                 isDodging = false; //end dodge
             }
+        }
+        else if (isAttacking)
+        {
+            isAttacking = false;
         }
     }
 }
