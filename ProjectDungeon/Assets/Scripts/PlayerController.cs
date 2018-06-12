@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour {
     public float dodgeSpeed;
     public bool isDodging;
     public bool isAttacking;
+    public bool isDead;
+    public GameObject deathText;
+
     int dodgeTimer;
 
     private Animator anim;
@@ -24,68 +27,78 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        if(InputManager.AttackButton() && !isAttacking) //check if attacking
+        if (!isDead)
         {
-            isAttacking = true;
-        }
-        if(InputManager.DodgeButton() && !isDodging) //check if dodging
-        {
-            dodgeTimer = 10;
-            isDodging = true;
-            anim.SetBool("isDodging", true);
-        }
-
-
-        if (!isDodging && !isAttacking) 
-        {
-            
-            
-            xMovement = InputManager.MoveHorizontal(); //get horizontal movement
-            yMovement = InputManager.MoveVertical();   //get vertical movement
-            if (xMovement != 0 || yMovement != 0)
+            if (InputManager.AttackButton() && !isAttacking) //check if attacking
             {
-                anim.SetBool("isWalking", true);
-                anim.SetFloat("xInput", xMovement);
-                anim.SetFloat("yInput", yMovement);
+                isAttacking = true;
+            }
+            if (InputManager.DodgeButton() && !isDodging) //check if dodging
+            {
+                dodgeTimer = 10;
+                isDodging = true;
+                anim.SetBool("isDodging", true);
+            }
+
+
+            if (!isDodging && !isAttacking)
+            {
+
+
+                xMovement = InputManager.MoveHorizontal(); //get horizontal movement
+                yMovement = InputManager.MoveVertical();   //get vertical movement
+                if (xMovement != 0 || yMovement != 0)
+                {
+                    anim.SetBool("isWalking", true);
+                    anim.SetFloat("xInput", xMovement);
+                    anim.SetFloat("yInput", yMovement);
+                }
+                else
+                {
+                    anim.SetBool("isWalking", false);
+                }
+                direction = new Vector2(xMovement, yMovement);
+
+                Physics2D.Raycast(transform.position, direction); //make raycast to show facing direction, used for attacking? 
+                Debug.DrawRay(transform.position, direction * moveSpeed, Color.green);
             }
             else
             {
                 anim.SetBool("isWalking", false);
             }
-            direction = new Vector2(xMovement,yMovement);
-
-            Physics2D.Raycast(transform.position, direction); //make raycast to show facing direction, used for attacking? 
-            Debug.DrawRay(transform.position, direction * moveSpeed, Color.green);
         }
         else
         {
-            anim.SetBool("isWalking", false);
+            deathText.SetActive(true);
+            rb.velocity = Vector2.zero;
         }
     }
 
     void FixedUpdate()
     {
-        if (!isDodging && !isAttacking)
+        if (!isDead)
         {
-            rb.velocity = direction.normalized * moveSpeed; //move player
-        }
-        else if(isDodging)
-        {
-            if (dodgeTimer > 0)
+            if (!isDodging && !isAttacking)
             {
-                rb.velocity = direction.normalized * dodgeSpeed; //dodge
-                dodgeTimer--;
+                rb.velocity = direction.normalized * moveSpeed; //move player
             }
-            else
+            else if (isDodging)
             {
-                isDodging = false; //end dodge
-                anim.SetBool("isDodging", false);
+                if (dodgeTimer > 0)
+                {
+                    rb.velocity = direction.normalized * dodgeSpeed; //dodge
+                    dodgeTimer--;
+                }
+                else
+                {
+                    isDodging = false; //end dodge
+                    anim.SetBool("isDodging", false);
+                }
             }
-        }
-        else if (isAttacking)
-        {
-            isAttacking = false;
+            else if (isAttacking)
+            {
+                isAttacking = false;
+            }
         }
     }
 }
