@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour {
     public bool isAttacking;
     public bool isDead;
     public GameObject deathText;
-
+    public Transform attackPos;
+    public float attackRadius;
+    public Collider2D[] objectsHit;
     int dodgeTimer;
 
     private Animator anim;
@@ -97,8 +99,26 @@ public class PlayerController : MonoBehaviour {
             }
             else if (isAttacking)
             {
+                Physics2D.OverlapCircleNonAlloc(attackPos.position, attackRadius, objectsHit);
+                Debug.Log("Attacking");
+                if(objectsHit.Length > 0)
+                {
+                    foreach(Collider2D hit in objectsHit)
+                    {
+                        Debug.Log("Found objects");
+                        Debug.Log(hit.gameObject.name);
+                        if(hit.gameObject.tag == "Enemy")
+                        {
+                            Destroy(hit.gameObject);
+                        }
+                    }
+                }
                 isAttacking = false;
             }
         }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(attackPos.position, attackRadius);
     }
 }
