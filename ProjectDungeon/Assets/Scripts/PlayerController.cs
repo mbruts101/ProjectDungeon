@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
     public float attackRadius;
     public Collider2D[] objectsHit;
     int dodgeTimer;
-
+    public LayerMask CanHit;
     private Animator anim;
     private Rigidbody2D rb;
     private Vector2 direction = new Vector2(); //used for finding the direction the player is facing without rotating player
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour {
             }
             else if (isAttacking)
             {
-                Physics2D.OverlapCircleNonAlloc(attackPos.position, attackRadius, objectsHit);
+                objectsHit = Physics2D.OverlapCircleAll(attackPos.position, attackRadius);
                 Debug.Log("Attacking");
                 if(objectsHit.Length > 0)
                 {
