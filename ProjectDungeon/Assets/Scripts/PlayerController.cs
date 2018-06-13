@@ -4,17 +4,24 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    //moving variables
     public float moveSpeed;
     public float dodgeSpeed;
+
     public bool isDodging;
     public bool isAttacking;
     public bool isDead;
+
     public GameObject deathText;
     public Transform attackPos;
+
+    //attacking variable
     public float attackRadius;
     public Collider2D[] objectsHit;
-    int dodgeTimer;
     public LayerMask CanHit;
+
+
+    int dodgeTimer;
     private Animator anim;
     private Rigidbody2D rb;
     private Vector2 direction = new Vector2(); //used for finding the direction the player is facing without rotating player

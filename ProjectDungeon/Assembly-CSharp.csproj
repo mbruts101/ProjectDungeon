@@ -51,10 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EnemyAttack.cs" />
-     <Compile Include="Assets\PlayerHealth.cs" />
+     <Compile Include="Assets\RoamingEnemy.cs" />
+     <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\InputManager.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\PlayerHealth.cs" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>D:/GitHub/ProjectDungeon/ProjectDungeon/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
