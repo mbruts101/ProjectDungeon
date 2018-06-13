@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoamingEnemy : MonoBehaviour {
+public class RoamingEnemy : MonoBehaviour
+{
 
 
     public Transform startPos;
@@ -11,45 +12,52 @@ public class RoamingEnemy : MonoBehaviour {
     public float waitTime;
     Transform lastPos;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
-        lastPos = startPos;	
-	}
+        lastPos = startPos;
+        StartCoroutine(Move());
+    }
 
-	void Update ()
+    void Update()
     {
-        float step = speed * Time.deltaTime;
 
-	    if(lastPos.position == startPos.position)
+
+    }
+
+    IEnumerator Move()
+    {
+        while (true)
         {
-            if (transform.position != endPos.position)
+            float step = speed * Time.deltaTime;
+
+            if (lastPos.position == startPos.position)
             {
-                Vector2 newPos = Vector2.MoveTowards(transform.position, endPos.position, step);
-                transform.position = newPos;
+                if (transform.position != endPos.position)
+                {
+                    Vector2 newPos = Vector2.MoveTowards(transform.position, endPos.position, step);
+                    transform.position = newPos;
+                    yield return null;
+                }
+                else
+                {
+                    yield return new WaitForSeconds(waitTime);
+                    lastPos = endPos;
+                }
             }
-            else
+            else if (lastPos.position == endPos.position)
             {
-                StartCoroutine(WaitToMove());
-                lastPos = endPos;
+                if (transform.position != startPos.position)
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, startPos.position, step);
+                    yield return null;
+                }
+                else
+                {
+                    yield return new WaitForSeconds(waitTime);
+                    lastPos = startPos;
+                }
             }
         }
-        else if(lastPos.position == endPos.position)
-        {
-            if (transform.position != startPos.position)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, startPos.position, step);
-            }
-            else
-            {
-                StartCoroutine(WaitToMove());
-                lastPos = startPos;
-            }
-        }
-	}
-
-    IEnumerator WaitToMove()
-    {
-        yield return new WaitForSeconds(waitTime);
     }
 }
