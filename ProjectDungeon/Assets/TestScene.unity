@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 86229432}
   m_Layer: 0
-  m_Name: RoamingEnemy
+  m_Name: PatrollingEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1560,7 +1560,7 @@ MonoBehaviour:
   startPos: {fileID: 980630594}
   endPos: {fileID: 1916298522}
   speed: 30
-  waitTime: 10
+  waitTime: 2
 --- !u!50 &2093750201
 Rigidbody2D:
   serializedVersion: 4

@@ -11,6 +11,8 @@ public class EnemyAttack : MonoBehaviour {
         if(col.gameObject.tag == "Player")
         {
             col.gameObject.GetComponent<PlayerHealth>().health -= attackDamage;
+            col.gameObject.GetComponent<PlayerController>().isHit = true;
+            col.gameObject.GetComponent<PlayerController>().hitTimer = 10;
         }
     }
 }

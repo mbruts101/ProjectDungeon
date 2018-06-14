@@ -20,10 +20,13 @@ public class PlayerController : MonoBehaviour {
     public Collider2D[] objectsHit;
     public LayerMask CanHit;
 
+    public bool isHit;
+    public int hitTimer;
 
     int dodgeTimer;
     private Animator anim;
     private Rigidbody2D rb;
+    private BoxCollider2D col;
     private Vector2 direction = new Vector2(); //used for finding the direction the player is facing without rotating player
     private float xMovement;
     private float yMovement;
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        col = GetComponent<BoxCollider2D>();
 	}
 	
 	// Update is called once per frame
@@ -40,7 +44,9 @@ public class PlayerController : MonoBehaviour {
         {
             if (InputManager.AttackButton() && !isAttacking) //check if attacking
             {
+                dodgeTimer = 10;
                 isAttacking = true;
+                anim.SetBool("isAttacking", true);
             }
             if (InputManager.DodgeButton() && !isDodging) //check if dodging
             {
@@ -50,7 +56,7 @@ public class PlayerController : MonoBehaviour {
             }
 
 
-            if (!isDodging && !isAttacking)
+            if (!isDodging && !isAttacking && !isHit)
             {
 
 
@@ -87,7 +93,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (!isDead)
         {
-            if (!isDodging && !isAttacking)
+            if (!isDodging && !isAttacking && !isHit)
             {
                 rb.velocity = direction.normalized * moveSpeed; //move player
             }
@@ -95,6 +101,7 @@ public class PlayerController : MonoBehaviour {
             {
                 if (dodgeTimer > 0)
                 {
+                    col.enabled = false;
                     rb.velocity = direction.normalized * dodgeSpeed; //dodge
                     dodgeTimer--;
                 }
@@ -102,25 +109,51 @@ public class PlayerController : MonoBehaviour {
                 {
                     isDodging = false; //end dodge
                     anim.SetBool("isDodging", false);
+                    col.enabled = true;
                 }
             }
             else if (isAttacking)
             {
-                objectsHit = Physics2D.OverlapCircleAll(attackPos.position, attackRadius);
-                Debug.Log("Attacking");
-                if(objectsHit.Length > 0)
+                if (dodgeTimer > 0)
                 {
-                    foreach(Collider2D hit in objectsHit)
+                    col.enabled = false;
+                    rb.velocity = direction.normalized * dodgeSpeed; //dodge
+                    dodgeTimer--;
+                }
+                else
+                {
+                    objectsHit = Physics2D.OverlapCircleAll(attackPos.position, attackRadius);
+                    Debug.Log("Attacking");
+                    if (objectsHit.Length > 0)
                     {
-                        Debug.Log("Found objects");
-                        Debug.Log(hit.gameObject.name);
-                        if(hit.gameObject.tag == "Enemy")
+                        foreach (Collider2D hit in objectsHit)
                         {
-                            Destroy(hit.gameObject);
+                            Debug.Log("Found objects");
+                            Debug.Log(hit.gameObject.name);
+                            if (hit.gameObject.tag == "Enemy")
+                            {
+                                Destroy(hit.gameObject);
+                            }
                         }
                     }
+                    isAttacking = false;
+                    anim.SetBool("isAttacking", false);
+                    col.enabled = true;
                 }
-                isAttacking = false;
+            }
+            else if (isHit)
+            {
+                if (hitTimer > 0)
+                {
+                    col.enabled = false;
+                    rb.velocity = -(direction.normalized * dodgeSpeed); //dodge
+                    hitTimer--;
+                }
+                else
+                {
+                    isHit = false;
+                    col.enabled = true;
+                }
             }
         }
     }
