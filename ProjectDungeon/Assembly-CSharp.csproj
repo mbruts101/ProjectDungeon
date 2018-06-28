@@ -51,6 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DungeonGen\BoardCreator.cs" />
+     <Compile Include="Assets\DungeonGen\Corridor.cs" />
+     <Compile Include="Assets\DungeonGen\IntRange.cs" />
+     <Compile Include="Assets\DungeonGen\Room.cs" />
+     <Compile Include="Assets\Scripts\ChasePlayer.cs" />
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\InputManager.cs" />
      <Compile Include="Assets\Scripts\PatrollingEnemy.cs" />

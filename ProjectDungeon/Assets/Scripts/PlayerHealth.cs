@@ -12,7 +12,8 @@ public class PlayerHealth : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        health = 100;	
+        health = 100;
+        healthSlider = GameObject.Find("PlayerHealthSlider").GetComponent<Slider>();
 	}
 	
 	// Update is called once per frame

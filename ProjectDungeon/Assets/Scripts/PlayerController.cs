@@ -157,8 +157,9 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
-    private void OnDrawGizmos()
+    /*  private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(attackPos.position, attackRadius);
     }
+    */
 }
